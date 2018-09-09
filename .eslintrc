@@ -1,0 +1,20 @@
+{
+  "parser": "babel-eslint",
+  "parserOptions": {
+    "sourceType": "module",
+    "allowImportExportEverywhere": true
+  },
+  "extends": ["react-app", "prettier", "prettier/flowtype", "prettier/react"],
+  "env": {
+    "browser": true,
+    "node": true
+  },
+  "plugins": ["flowtype", "import", "promise", "compat", "react"],
+  "settings": {
+    "import/resolver": {
+      "webpack": {
+        "config": "webpack.config.eslint.js"
+      }
+    }
+  }
+}

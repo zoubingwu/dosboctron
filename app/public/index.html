@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <title>game</title>
+  <style>
+    html,
+    body {
+      margin: 0;
+      padding: 0;
+    }
+
+    #canvas {
+      width: 100vw;
+      height: 100vh;
+    }
+  </style>
+</head>
+
+<body>
+  <canvas id="canvas"></canvas>
+  <script src="./emularity/es6-promise.js"></script>
+  <script src="./emularity/browserfs.min.js"></script>
+  <script src="./emularity/loader.js"></script>
+  <script>
+    function initEmulator({
+      node = document.querySelector('#canvas'),
+      resolution = [640, 480],
+      filename,
+      executable,
+    }) {
+      window.__emulator__ = new Emulator(
+        node,
+        null,
+        new DosBoxLoader(
+          DosBoxLoader.emulatorJS('emularity/dosbox/dosbox-sync.js'),
+          DosBoxLoader.locateAdditionalEmulatorJS(locateAdditionalFiles),
+          DosBoxLoader.nativeResolution(...resolution),
+          DosBoxLoader.mountZip(
+            'c',
+            DosBoxLoader.fetchFile('Game File', `gamedata/${filename}`),
+          ),
+          DosBoxLoader.startExe(executable)
+        )
+      );
+
+      __emulator__.start({ waitAfterDownloading: true });
+    }
+
+    function locateAdditionalFiles(name) {
+      if (name === 'dosbox.html.mem') {
+        return 'emularity/dosbox/dosbox-sync.mem';
+      } else {
+        return 'emularity/dosbox/dosbox-sync.mem' + name;
+      }
+    }
+  </script>
+  <script>
+    const { ipcRenderer } = require('electron');
+
+    ipcRenderer.on('init-game', (event, arg) => {
+      initEmulator(arg);
+    });
+  </script>
+</body>
+
+</html>
