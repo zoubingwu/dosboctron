@@ -77,9 +77,6 @@ before_script:
 script:
   - yarn package
   - yarn lint
-  - yarn flow
-  - yarn test
-  - yarn test-e2e
   # On Linux, check if packaging to windows works
   # NOTE: Remove this if your project has native dependencies
   - |
